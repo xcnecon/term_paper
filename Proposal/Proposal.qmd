@@ -1,0 +1,70 @@
+---
+title: "Empirical Testing for Kalecki-Levy Profit Equation"
+format: 
+    pdf:
+        documentclass: article 
+        number-sections: true
+        margin-top: 1in
+        margin-bottom: 1in
+        margin-left: 1in
+        margin-right: 1in
+        linestretch:  1.5
+        fontsize: 12pt
+    html: default
+execute: 
+  echo: false
+  warning: false     
+author: "Chenning Xu"        
+bibliography: references.bib
+---
+
+# Introduction
+
+In capitalism, profits motivate firms to employ labor and produce output for sale [@veblen_theory_1904]. Due to the fundamental uncertainty of the future, firms expect future profits and make investments accordingly, often disproportionately based on the recent conditions of sales and profits [@keynes_general_1936]. The changes in current and expected future corporate profits significantly affect economic outlooks. Meanwhile, the valuation of equity in firms is often based on the discounted value of future profits. Lenders extend loans to firms based on their earnings capacity, and the soundness of these loans depends on the profits firms realize in the future [@minsky_financial-instability_1982]. Therefore, profit is seen as one of the most critical concepts in economics and finance. The Kalecki-Levy profit equation is an accounting identity that shows how aggregate corporate profit is determined by economic variables such as investment and government deficits [@levy_where_2008]. This essay aims to empirically test the Kalecki-Levy profit equation using available economic data in the US (and other countries if time and data permit) and construct a predictive model using available estimates to forecast future corporate profits.
+
+# Background and Research Question
+
+@levy_where_2008 has presented a stylized Kalecki-Levy equation for open economies:
+$$
+\begin{aligned}
+\text{Profit after tax} &= \text{Net Investment} \\
+                        &\phantom{=} - \text{Personal Saving} \\
+                        &\phantom{=} - \text{Foreign Saving} \\
+                        &\phantom{=} - \text{Government Saving}\\
+                        &\phantom{=} + \text{Dividend}
+\end{aligned}
+$$ {#eq-pq}
+
+The Kalecki-Levy equation, as an accounting identity, is tautologically true, but its useful application in reality depends on the quality and well-defined nature of available data. The purpose of this research is not to test whether this equation is correct but rather to test whether such a behavioral relation holds in the available data for these variables. In the U.S., the data for the six variables could be obtained from the National Income and Product Accounts (NIPA), although discrepancies always exist between the theoretical variable and the available data. For example, the after-tax profit variable on the left-hand side of the equation does not include the mark-to-market of financial assets held, which, in NIPA, is included in the profit of financial firms [@levy_mean_2016].
+
+Aside from testing the equation using data in NIPA, this project intends to use estimates of the RHS variables available in the market (such as estimated capex from regional Fed manufacturing surveys and estimated budget deficits by the Congressional Budget Office) to build a predictive model for future profit. If the result is significant, similar models could be built for predicting the earnings of stock indexes such as the S&P 500.
+
+# Potential Data Sources
+
+1. Historical corporate profit, net private investment, personal saving, foreign saving, government deficit, and corporate dividend: National Income and Product Accounts (NIPA), Federal Reserve Economic Data (FRED).  
+
+2. Expected capital spending: Federal Reserve Economic Data (FRED).  
+
+3. Expected government deficit: Congressional Budget Office (CBO).  
+
+4. S&P 500 historical earnings: S&P Global.  
+
+5. Similar data sources in other developed countries.
+
+# Potential Approach
+
+This project will use multivariate regression and time-series analysis to test how well aggregate corporate profit variations are explained by investment, household saving, net export, government deficit, and dividend, using the corresponding data in the NIPA account, controlling for time effects and inflation. This project will also build a predictive model using forecasts for the RHS variables in @eq-pq, the accuracy of which will be tested using out-of-sample data. If time and data permit, the research will be extended to other countries.
+
+# Expected Findings
+
+It is expected that the RHS variables in @eq-pq will largely explain the variations in profits using data from the NIPA account. Tests using yearly data could yield more robust results than quarterly data. The accuracy of the predictive model is uncertain, depending on how accurate the estimates are. Due to the high correlation between aggregate corporate profits and S&P 500 earnings, the behavioral and predictive models are expected to work similarly well in explaining and predicting the latter.
+
+# Conclusion
+
+This research will enhance our understanding of how aggregate corporate profit is determined. The behavioral model using NIPA data, if significant, could allow us to better analyze the economy. For example, we could estimate, if the government intends to cut the deficit, how much other variables such as net private investment and personal saving need to change to maintain the same level of total profit. Meanwhile, the predictive model will provide a tool to forecast potential future economic changes and financial market fluctuations.
+
+# Github Repository
+
+Data, code, and outputs for this project will be available in the following GitHub repository: https://github.com/xcnecon/Term-Paper.
+
+# References
