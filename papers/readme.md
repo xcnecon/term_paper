@@ -1,1 +1,1 @@
-Please add the papers you read in this folder.
+This folder contains papers and essays that help in understanding the Kalecki-Levy profit equation.
