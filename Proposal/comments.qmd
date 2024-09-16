@@ -1,0 +1,15 @@
+Dear Chenning
+
+Interesting proposal. I'm not very familiar with the Kalecki-Levy profit equation, so, for the sake of other people reading your paper, you may want to explain it a bit more. This also means I may not be able to provide much feedback on the theory behind your research question.
+
+I think you may want to clarify your point regarding the methodology. Is there any reason to believe that equation you show in the data will not hold? Also, perhaps language, but i couldnt understand the point regarding "behaivioral relation". 
+
+Since I am not familiar with this literature, I would ask you to provide 1 or 2 papers that have done something similar to what you are proposing. This will help me understand the context of your research question, and probably guide you on how to proceed with your research.
+
+I also see, you are considering using time series analysis. Be adviced that we will see some of Time series around the 7th week of the course. So, if you are not familiar with it, you may want to start looking into it using other resources. We can also discuss it in office hours.
+
+I like the idea of using or building a predictive model. Just keep in mind that you may need long time series data to make it work. This means, try to get a hold of your data as soon as possible. I agree with you that trying to do this with other countries may be too much, due to data availability.
+
+Finally, I made a small change in your proposal, so references are always in the right place, and the section is unnumbered.
+
+- Grade: 5/5

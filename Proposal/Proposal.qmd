@@ -67,4 +67,8 @@ This research will enhance our understanding of how aggregate corporate profit i
 
 Data, code, and outputs for this project will be available in the following GitHub repository: https://github.com/xcnecon/Term-Paper.
 
-# References
+# References {.unnumbered}
+
+::: {#refs}
+:::
+
