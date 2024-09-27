@@ -5,7 +5,7 @@ clear
 cd "$raw"
 import delimited "data_quarterly.csv"
 xpose, clear
-rename (v1 v2 v3 v4 v5 v6 v7) (gs ps ni fi nd cpwi cp)
+rename (v1 v2 v3 v4 v5 v6 v7 v8) (ps gs ni fi nd cpwi cp discrepancy)
 drop in 1 // for weird reasons, the first line is empty
 gen index = _n
 cd "$processed"
@@ -34,7 +34,7 @@ clear
 cd "$raw"
 import delimited "data_annual.csv"
 xpose, clear
-rename (v1 v2 v3 v4 v5 v6 v7) (gs ps ni fi nd cpwi cp)
+rename (v1 v2 v3 v4 v5 v6 v7 v8) (ps gs ni fi nd cpwi cp discrepancy)
 drop in 1 // for weird reasons, the first line is empty
 set obs 95
 gen date = _n + 1928
