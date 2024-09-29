@@ -22,7 +22,7 @@ Note: All data are in $ billions.
 8. Statistical discrepancy: table 5.1 line 42  
 
 ### Data cleaning process
-1. I copied the data I need from the NIPA tables, and pasted them into a new CSV file, which is in wide form without column names.
+1. I copied the data I need from the NIPA tables, and pasted them into a new CSV file(data_quarterly.csv and data_annual.csv), which is in wide form without column names.
 2. I imported them into Stata and transpose(xpose function) them into long form, and add variable names to the columns. 
 3. The processed data are saved in the processed_data folder. 
 
