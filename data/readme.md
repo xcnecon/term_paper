@@ -28,6 +28,11 @@ Note: All data are in $ billions.
 
 ## CBO data
 Source: https://github.com/US-CBO/eval-projections/blob/main/input_data/baselines.csv  
-Time: 1982 to 2024  
+Time: 1982 to 2024, annual
 Note: All data are in $ billions.  
-Datacleaning process: I imported data into stata. Deleted forecast for variables other than deficit. Keep only the forecast for next year since CBO forecasts 10 years. Keep only the last forecast for the next year in one year since CBO forecasts many times in one year for the next year. The processed data is saved in the processed_data folder. 
+Data cleaning process: I imported data into stata. Deleted forecast for variables other than deficit. Keep only the forecast for next year since CBO forecasts 10 years. Keep only the last forecast for the next year in one year since CBO forecasts many times in one year for the next year. The processed data is saved in the processed_data folder. 
+
+## SP500 data
+Source: http://www.econ.yale.edu/~shiller/data.htm
+Time: 1871 to 2024, monthly
+Data cleaning process: I cropped EPS and price data from Shiller's excel sheet (sp.xls), and saved in sp.csv. Since data are monthly, I transformed them into quarterly data. Price % change is calculated. 
