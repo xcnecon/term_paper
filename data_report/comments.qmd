@@ -1,0 +1,14 @@
+---
+title: Report and comments
+format: pdf
+---
+
+# Comments
+
+Thanks for putting this together. I think you did a good job including your psudo report on a MD file. 
+
+For future reports of progress, please add a subfolder with the corresponding QMD and PDF report. 
+
+Other than that, you only missed the descriptive statistics and visualizations, but I will be moving that around.
+
+Grade: 5/5
