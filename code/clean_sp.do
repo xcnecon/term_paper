@@ -12,11 +12,19 @@ keep if mod(index, 3)==0
 drop index
 // drop data before 1947, which is too old
 drop if date < 1947
-// setup a new index for easy merging
-count
-set obs 310
-gen index = _n
-order index
+// standardize date variable for future merging
+gen year = floor(date)  // Extract the year
+gen month = round((date) * 100 - year * 100)  // Extract the month
+gen quarter = .
+replace quarter = 1 if inrange(month, 1, 3)
+replace quarter = 2 if inrange(month, 4, 6)
+replace quarter = 3 if inrange(month, 7, 9)
+replace quarter = 4 if inrange(month, 10, 12)
+drop date
+gen date = yq(year, quarter)
+format date %tq  // Apply quarterly date format
+drop month quarter year
+order date
 // calculate quarterly stock price change
 destring price, replace
 gen return = (price - price[_n-1]) / price[_n-1]

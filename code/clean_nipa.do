@@ -13,10 +13,8 @@ save "data_quarterly.dta", replace
 // create a list of date
 clear
 set obs 310
-gen quarter = qofd(date("1947-01-01", "YMD")) + _n - 1
-gen date = dofq(quarter)
-format date %tdCCYY-NN-DD
-drop quarter
+gen date = qofd(date("1947-01-01", "YMD")) + _n - 1
+format date %tq
 gen index = _n
 cd "$processed"
 save "datelist.dta", replace
