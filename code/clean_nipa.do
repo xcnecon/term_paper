@@ -24,8 +24,15 @@ merge 1:1 index using "datelist.dta"
 drop _merge
 drop index
 order date
-save "data_quarterly", replace
 erase "datelist.dta" // remove the file created to save the date list
+
+//merge with sp quarterly data
+merge 1:1 date using "sp_quarterly.dta"
+//save
+cd "$final"
+save "data_quarterly", replace
+drop if missing(date) | missing(ps)
+drop _merge
 
 // clean annual data
 clear
@@ -37,6 +44,14 @@ drop in 1 // for weird reasons, the first line is empty
 set obs 95
 gen date = _n + 1928
 order date
+
+//merge with sp annual data
 cd "$processed"
+merge 1:1 date using "sp_annual.dta"
+drop _merge
+drop if missing(date) | missing(ps)
+
+//save
+cd "$final"
 save "data_annual.dta", replace
 

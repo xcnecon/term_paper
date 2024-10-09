@@ -30,4 +30,23 @@ destring price, replace
 gen return = (price - price[_n-1]) / price[_n-1]
 // save
 cd "$processed"
-save "sp.dta", replace
+save "sp_quarterly.dta", replace
+
+
+// generate annual data
+cd "$raw"
+import delimited "sp.csv", clear
+// drop missing obs
+drop if missing(earnings)
+// only keep the last data in the last month of a year
+count
+set obs 1842
+gen index = _n
+keep if mod(index, 12)==0
+drop index
+// transfrom month into year
+replace date = round(date)
+format date %ty
+// save
+cd "$processed"
+save "sp_annual.dta", replace
