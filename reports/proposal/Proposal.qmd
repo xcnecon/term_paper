@@ -35,21 +35,17 @@ $$
 \end{aligned}
 $$ {#eq-pq}
 
-The Kalecki-Levy equation, as an accounting identity, is tautologically true, but its useful application in reality depends on the quality and well-defined nature of available data. The purpose of this research is not to test whether this equation is correct but rather to test whether such a behavioral relation holds in the available data for these variables. In the U.S., the data for the six variables could be obtained from the National Income and Product Accounts (NIPA), although discrepancies always exist between the theoretical variable and the available data. For example, the after-tax profit variable on the left-hand side of the equation does not include the mark-to-market of financial assets held, which, in NIPA, is included in the profit of financial firms [@levy_mean_2016]. Therefore, it might be more advisable to use the aggreagte profit of non-financial firms, and the coefficients of the independent variable in the behavioral model are likely to differ from 1 and -1, as they are in @eq-pq. 
-
-Aside from testing the equation using data in NIPA, this project intends to use estimates of the RHS variables available in the market (such as estimated capex from regional Fed manufacturing surveys and estimated budget deficits by the Congressional Budget Office) to build a predictive model for future profit. If the result is significant, similar models could be built for predicting the earnings of stock indexes such as the S&P 500.
+The Kalecki-Levy equation, as an accounting identity, is tautologically true. However, is it possible to use the past data of the right-hand-side variables to predict future corporate profit? This paper intends to build a preditive model for this purpose. If the result is significant, similar models could be built for predicting the earnings of stock indexes such as the S&P 500.
 
 # Potential Data Sources
 
 1. Historical corporate profit, net private investment, personal saving, foreign saving, government deficit, and corporate dividend: National Income and Product Accounts (NIPA), Federal Reserve Economic Data (FRED).  
 
-2. Expected capital spending: Federal Reserve Economic Data (FRED).  
+2. Expected government deficit: Congressional Budget Office (CBO).  
 
-3. Expected government deficit: Congressional Budget Office (CBO).  
+3. S&P 500 historical earnings: S&P Global.  
 
-4. S&P 500 historical earnings: S&P Global.  
-
-5. Similar data sources in other developed countries.
+4. Similar data sources in other developed countries.
 
 # Potential Approach
 
