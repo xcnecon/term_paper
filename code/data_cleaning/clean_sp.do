@@ -59,6 +59,10 @@ drop index  // Drop the index variable as it's no longer needed
 replace date = round(date)  // Round the date to the nearest year (assuming monthly format)
 format date %ty  // Apply yearly date format to the 'date' variable
 
-// Step 13: Save the processed annual data
+// Step 13: Calculate the quarterly stock price return
+destring price, replace  // Ensure the 'price' variable is numeric
+gen return = (price - price[_n-1]) / price[_n-1]  // Calculate percentage change in stock price from the previous period
+
+// Step 14: Save the processed annual data
 cd "$processed"
 save "sp_annual.dta", replace  // Save the processed data as a .dta file

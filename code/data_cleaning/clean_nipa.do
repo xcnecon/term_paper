@@ -77,6 +77,7 @@ label variable nd "Net Dividend"
 label variable discrepancy "Statistical Discrepancy in the NIPA"
 label variable price "SP500 Price"
 label variable earnings "Eearnings per SP500"
+label variable return "SP500 Quarterly Return"
 
 label variable d_cpwi "Corporate Profit (Delta qoq)"
 label variable d_cp "Corporate Profit without Adjustments (Delta qoq)"
@@ -151,6 +152,8 @@ label variable nd "Net Dividend"
 label variable discrepancy "Statistical Discrepancy in the NIPA"
 label variable price "SP500 Price"
 label variable earnings "Eearnings per SP500"
+label variable return "SP500 Quarterly Return"
+
 
 label variable d_cpwi "Corporate Profit (Delta qoq)"
 label variable d_cp "Corporate Profit without Adjustments (Delta qoq)"
