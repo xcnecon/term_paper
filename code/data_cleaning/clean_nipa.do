@@ -58,7 +58,6 @@ gen d_nd = d.nd
 
 // Step 10: Generate percentage change variables for the series
 gen c_cpwi = d_cpwi / cpwi[_n-1]
-gen c_cp = d_cp / cp[_n-1]
 gen c_ps = d_ps / ps[_n-1]
 gen c_gs = d_gs / gs[_n-1]
 gen c_ni = d_ni / ni[_n-1]
@@ -80,7 +79,6 @@ label variable earnings "Eearnings per SP500"
 label variable return "SP500 Quarterly Return"
 
 label variable d_cpwi "Corporate Profit (Delta qoq)"
-label variable d_cp "Corporate Profit without Adjustments (Delta qoq)"
 label variable d_gs "Government Saving (Delta qoq)"
 label variable d_ps "Personal Savings (Delta qoq)"
 label variable d_ni "Net Investment (Delta qoq)"
@@ -88,7 +86,6 @@ label variable d_fi "Foreign Saving (Delta qoq)"
 label variable d_nd "Net Dividend (Delta qoq)"
 
 label variable c_cpwi "Corporate Profit (% qoq)"
-label variable c_cp "Corporate Profit without Adjustments (% qoq)"
 label variable c_gs "Government Saving (% qoq)"
 label variable c_ps "Personal Savings (% qoq)"
 label variable c_ni "Net Investment (% qoq)"
@@ -156,7 +153,6 @@ label variable return "SP500 Quarterly Return"
 
 
 label variable d_cpwi "Corporate Profit (Delta qoq)"
-label variable d_cp "Corporate Profit without Adjustments (Delta qoq)"
 label variable d_gs "Government Saving (Delta qoq)"
 label variable d_ps "Personal Savings (Delta qoq)"
 label variable d_ni "Net Investment (Delta qoq)"
@@ -164,7 +160,6 @@ label variable d_fi "Foreign Saving (Delta qoq)"
 label variable d_nd "Net Dividend (Delta qoq)"
 
 label variable c_cpwi "Corporate Profit (% qoq)"
-label variable c_cp "Corporate Profit without Adjustments (% qoq)"
 label variable c_gs "Government Saving (% qoq)"
 label variable c_ps "Personal Savings (% qoq)"
 label variable c_ni "Net Investment (% qoq)"
