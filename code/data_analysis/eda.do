@@ -8,9 +8,8 @@ tsset date  // Set the time variable for time series analysis
 // ------------------------------------------------------------
 // Step 2: Generate and Export Summary Statistics
 
-estpost summarize c_cpwi c_ps c_gs c_ni c_fi c_nd return  // Generate summary statistics for selected variables
+estpost summarize d_cpwi d_ps d_gs d_ni d_fi d_nd return  // Generate summary statistics for selected variables
 est sto sum_stats  // Store the summary statistics in memory
-
 cd "$results"  // Navigate to the results folder for saving output
 esttab sum_stats using sum_stats.txt, cells("count mean sd min max") /// 
     nomtitle nonumber md replace label  // Export summary statistics to a text file with count, mean, sd, min, and max
@@ -19,15 +18,16 @@ esttab sum_stats using sum_stats.txt, cells("count mean sd min max") ///
 // Step 3: Create Line Plot for Multiple Variables Over Time
 
 twoway (line cpwi date) (line ps date) (line gs date) (line nd date) (line fi date) (line ni date)  // Plot multiple variables over time
-graph export "line_plot_1.png", replace  // Export the graph as a PNG file
+graph export "line_plot_1.png", replace 
 
 // ------------------------------------------------------------
 // Step 4: Create Line Plot to Show Identity Relationship
 
 gen rhs = -ps -gs + fi + nd + ni  // Create a new variable based on the identity equation (right-hand side)
 label variable rhs "-ps -gs + fi + nd + ni"
-twoway (line rhs date) (line cpwi date)  // Plot the identity variable against corporate profit
-graph export "line_plot_2.png", replace  // Export the graph showing the identity
+twoway (line rhs date) (line cpwi date) // Plot the identity variable against corporate profit
+graph export "line_plot_2.png", replace 
+
 
 // ------------------------------------------------------------
 // Step 5: Create Scatter Plot for Identity Relationship with Adjustments
@@ -36,7 +36,8 @@ gen rhs_adjusted = rhs - discrepancy  // Adjust the rhs variable by subtracting 
 label variable rhs_adjusted "-ps -gs + fi + nd + ni - discrepancy"
 scatter cpwi rhs_adjusted, ytitle("Corporate Profit") /// 
     xtitle("Net_invest + Foreign_save + Net_div - Personal_save - Gov_save - Stat_disc")  // Create a scatter plot to compare the variables
-graph export "scatter_plot_1.png", replace  // Export the scatter plot as a PNG file
+graph export "scatter_plot_1.png", replace // Export the scatter plot as a PNG file
+
 
 // ------------------------------------------------------------
 // Step 6: Create Individual Line Plots for % QoQ Changes
