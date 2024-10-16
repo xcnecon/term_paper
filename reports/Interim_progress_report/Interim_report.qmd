@@ -1,0 +1,197 @@
+---
+title: "Predicting the Next-Quarter Corporate Profit with Vector Autoregression"
+format: 
+    pdf:
+        documentclass: article 
+        number-sections: true
+        margin-top: 1in
+        margin-bottom: 1in
+        margin-left: 1in
+        margin-right: 1in
+        linestretch:  1.5
+        fontsize: 10pt
+execute: 
+  echo: false
+  warning: false     
+author: "Chenning Xu"        
+bibliography: reference.bib
+---
+
+# Introduction
+In capitalism, profits motivate firms to employ labor and produce output for sale [@veblen_theory_1904]. Due to the fundamental uncertainty of the future, firms expect future profits and make investments accordingly, often disproportionately influenced by recent sales and profit conditions. [@keynes_general_1936]. The changes in current and expected future corporate profits significantly affect economic outlooks. Additionally, the valuation of equity in firms is often based on the discounted value of future profits. Lenders extend loans to firms based on their earnings capacity, and the soundness of these loans depends on the profits firms realize in the future [@minsky_financial-instability_1982]. Therefore, profit is seen as one of the most critical concepts in economics and finance. The Kalecki-Levy profit equation is an accounting identity that shows how aggregate corporate profit is determined by economic variables such as investment and government deficits [@levy_where_2008]. This project aims to use the variables in the Kalecki-Levy equation to build a predictive model for the next-quarter corporate profit. 
+
+
+# Theoretical Background
+## Kalecki-Levy Profit Equation
+@levy_where_2008 has presented a stylized Kalecki-Levy equation for open economies (signs of RHS variables are adjusted by me according to the National Income and Product Accounts(NIPA) accounting convention):
+$$
+\begin{aligned}
+\text{Profit after tax} &= \text{Net Investment} \\
+                        &\phantom{=} - \text{Personal Saving} \\
+                        &\phantom{=} + \text{Foreign Saving} \\
+                        &\phantom{=} - \text{Government Saving}\\
+                        &\phantom{=} + \text{Net Dividend}
+\end{aligned}
+$$ {#eq-pq}
+
+The Kalecki-Levy equation, as an accounting identity, is tautologically true. Here is the proof:
+$$ I = S = PS + CS + FS + GS$$
+$$ I = PS + (CP - ND) + FS + GS$$
+$$ CP = I - PS - FS - GS + ND$$
+where *I* is net investment(gross investment - depreciation), *S* is net saving, *PS* is personal saving, *FS* is foreign saving, *GS* is government saving, *CP* is net corporate profit and *ND* is net dividend(total dividend exlucing dividend paid to firms). Since in the NIPA account, *Foreign Saving* is recorded as a negative figure, after flipping the sign of it, we get @eq-pq. For technicality, please refer to @bea_nipa_2024.
+
+ 
+Since the above analysis simply showed an accounting analysis, we could not infer any behavioral relations or causality from it. However, Minsky demonstrated with logic that it is the RHS determining corporate profit, not the vice versa. The straightforward explanation for investment causing profit is that firms could not control future profit but can determine how much they invest in the next quarter based on their expectation of future economic condition. For detailed analysis, please refer to Minsky (1986, Chapter 2). 
+
+
+## Research Motivation
+With the knowledge of profit determination from the Kalecki-Levy equation, it is natural to ask whether past data of the RHS variables could predict future corporate profit. Could there be momentum in net investment, meaning that if net investment has been growing quickly over the past four quarters, it is likely to continue growing in the next quarter, thus leading to higher corporate profit? Could a high personal saving rate over the last several quarters predict a decline in personal saving in the next quarter, thereby increasing corporate profit? 
+
+
+@trofimov_determinants_2022 used a panel VAR to examine the relationship between profit margins and the determinants of profit in the Kalecki profit equation. The study found that a trade surplus has a positive effect on profit margins, while a government deficit has a negative effect. However, it could not confirm the relationship between the investment rate and profit margins. Despite this, I could not find any attempts in the literature that try to predict actual corporate profit in the future.
+
+
+To answer my questions, this project uses a rolling-window Vector Auto-Regression(VAR) model to predict the next-quarter corporate. See detailed discussion in the next section.
+
+
+# Data
+## Sources
+1. The annual and quarterly series of corporate profit, personal saving, foreign saving, government saving and net dividend are collected from NIPA(https://www.bea.gov/itable/national-gdp-and-personal-income).
+2. The monthly series of SP500 price and earnings are collected from Robert Shiller  
+(http://www.econ.yale.edu/~shiller/data.htm).
+3. The annual projection of next-year budget deficit is collected from CBO (https://github.com/US-CBO/eval-projections/blob/main/input_data/baselines.csv ).
+4. Currently, only the quarterly series of NIPA is explored.
+
+## Exploratory Data Analysis
+:::{#fig-fig1}
+**Figure 1: Time-Series of the Variables in Kalecki-Levy Equation**
+
+![](../../results/line_plot_1.png){width=100% fig-align=center}
+
+This graph shows that all of the six variables in the Kalecki-Levy equation grows with time by absolute value, and therefore are not stationary. 
+:::
+
+\newpage
+
+:::{#fig-fig2}
+**Figure 2: Corporate Profit and RHS**
+
+![](../../results/line_plot_2.png){width=70% fig-align=center}
+
+This graph shows the close relation between corporate profit and the sum of the RHS.
+:::
+
+:::{#fig-fig3}
+**Figure 3: The Identity Corporate Profit and RHS after Adjusting for Statistical Discrepancy**
+
+![](../../results/scatter_plot_1.png){width=70% fig-align=center}
+
+This graph shows the exact identity between corporate profit and the RHS after deducting the statistical discrepancy term in the NIPA. 
+:::
+
+\newpage
+
+:::{#fig-fig4}
+**Figure 4: Detrending the variables - % Change QoQ**
+
+![](../../results/line_plot_3.png){width=70% fig-align=center}
+
+This graph shows the quarter-on-quarter percentage change of the six variables. The data shows that this apporach of detrending the variables generage highly volatile outcomes(changes over 1000%). Besides, using pct change loses the identity relation between varibles, and thus this apporach was not used in later analysis. 
+:::
+
+:::{#fig-fig5}
+**Figure 5: Detrending the variables - Delta QoQ**
+
+![](../../results/line_plot_4.png){width=70% fig-align=center}
+
+This graph shows the quarter-on-quarter difference of the six variables. There are still some notible extreme values during crises, but it seems better than percentage changes. Since the differences grow with time by absolute value, regression across the entire data set should suffer from heterskedasticity. Dynamic prediction is utilised to mitigate the issue. 
+:::
+
+:::{#tbl-sumstats}
+
+{{< include sum_stats.txt >}}
+
+This table shows the summary statistics for the qoq delta data that is later used in VAR analysis. 
+
+**Summary Statistics**
+:::
+
+
+# Methodology and Analysis
+## VAR Analysis
+A vector autoregression(for detail, refer to @bekes_data_2021, page 505) is performed on the entire dataset, and a granger causality test(refer to @noauthor_granger_2024) is performed, to show predictibility in the data. The formula for the VAR with four lags (one year) and controlled time effect:
+$$
+\begin{aligned}
+d_{cp,t} = & \ \alpha_{cp} + \sum_{i=1}^{4} \left( \beta_{cp,cp,i} d_{cp,t-i} + \beta_{cp,ps,i} d_{ps,t-i} \right. \\
+           & \ \left. + \beta_{cp,gs,i} d_{gs,t-i} + \beta_{cp,ni,i} d_{ni,t-i} + \beta_{cp,fi,i} d_{fi,t-i} \right) \\
+           & \ + \gamma_{cp} \cdot \text{date}_t + \epsilon_{cp,t}
+\end{aligned}
+$${#eq-var}
+
+Where: $\alpha_{cp}$ is the intercept for the equation; $\beta_{cp,cp,i}, \beta_{cp,ps,i}, \beta_{cp,gs,i}, \beta_{cp,ni,i}, \beta_{cp,fi,i}$ are the coefficients for the lagged values of the endogenous variables at lag $i$; $\gamma_{cp}$ is the coefficient for the exogenous variable (date); $\epsilon_{cp,t}$ is the error term (residual) for $d_{cp,t}$. 
+
+Due to the length limit and our narrow interest on predicting corporate profit, the equations for other variables are not shown here. The result of the regression is in "../results/reg_table_1.txt", and we only present the significant part related to corporate profit here. 
+
+:::{#tbl-var}
+
+{{< include reg_table_1_short.txt >}}
+
+**VAR Results**
+:::
+
+Some prominent findings: $d_cp$ is positively correlated with $d_cp$ two quarters ago, and negatively three quarters ago, potentially idicating corporate profit growth has short-term momentum and longer-term reversal. $d_cp$ is negatively correlated with $d_fi$ one two and four quarters ago, indicating that increase in foreign saving in the past year predicts higher corporate profit growth. $d_cp$ is not correlated with any of change in net investment in the past year. And $d_cp$ is positively correlated with time, indicating that change in corporate profit grows with time. 
+
+
+A Granger causality test was performed, with results stored in "../results/granger_results.txt". The results are consistent with the VAR analysis above, showing that, except for net investment, all the other four variables (including lagged corporate profit itself) have predictive power for next-quarter corporate profit. Additionally, it is potentially profit leading investment, rather than the other way around (this finding does not contradict @minsky_stabilizing_1986, which proved that in one specific period, investment determined profit).
+
+
+The VAR and Granger causality test partially explain how the lagged variables correlate with changes in next-quarter profit, but they do not prove the model's predictive ability for future corporate profits due to several constraints. First, the time series is too long, and there is significant heteroskedasticity due to increasing variance across all variables. Second, it is unrealistic to use data from multiple decades ago to predict future economic conditions. Finally, no out-of-sample test has been conducted to demonstrate the model's predictive power in real-world scenarios. A rolling-window VAR is performed in the next section to address or mitigate these issues.
+
+
+## Rolling-Window VAR
+With the rolling-window VAR, we are only using relatively recent past data to train the model and predict the next-quarter change in corporate profit, which mitigates heterskedasticity. Besides, predicitons are made to the $d_cp$ varibale in the next quarter, which is out of the training sample. The result of a rolling-window VAR with a lookback period of 80 (80 quarters, ie. 20 yers) is demonstrated below. The $R^2$ is 0.48, similar to the VAR conducted on the whole dataset, which shows that the model has strong preditive power for the next-quarter change in corproate profit throughout the tesing period. 
+
+
+:::{#fig-fig6}
+**Figure 6: Predicted $d_cp$ vs Actuals**
+
+![](../../results/line_plot_5.png){width=80% fig-align=center}
+
+This graph shows the predicted $d_cp$ and actual $d_cp$.
+:::
+
+:::{#fig-fig7}
+**Figure 7: Predicted Corporate Profit vs Actuals**
+
+![](../../results/line_plot_6.png){width=80% fig-align=center}
+
+This graph shows the predicted corporate profit and actual corporate profit. The predicted corprorate profit is calculated by adding up the previous-quarter actual and the predicted $d_cp$ for this quarter. 
+:::
+
+\newpage
+:::{#tbl-rwvar}
+
+{{< include reg_table_2.txt >}}
+
+Regressing the actual $d_cp$ on the predicted $d_cp$ shows a similar $R^2$ as that of the prediction. The beta is very close to 1 and is highly significant. 
+
+**Rolling-Window VAR Results**
+:::
+
+
+# Conclusion and Limitations
+This project conducted a rolling-window VAR to predict next-quarter corporate profit using variables from the Kalecki-Levy Profit Equation. The high $R^2$ indicates considerable predictive power for such a model. If simply analyzing past data can yield positive results, combining this approach with external forecasts and macroeconomic insights could produce an even more effective predictive model. The findings from this study demonstrate that approaching corporate profit from a *macro perspective* holds great potential compared to the bottom-up approach, which merely aggregates the expected profits of individual firms.
+
+This project has some limitations. For example, by using a rolling-window model, there is limited information on *how* the lagged variables predict next-quarter corporate profit, aside from their overall effectiveness. Additionally, more robustness checks are required before generalizing these findings.
+
+
+:::{#fig-fig8}
+**Figure 8: Predicting the Profit Growth in the Next Four Quarters From Now**
+
+![](../../results/prediction.png){width=80% fig-align=center}
+
+This graph shows the prediction made by a VAR model with the last 80 quarters as its training data.
+:::
+
+\newpage
+# References
