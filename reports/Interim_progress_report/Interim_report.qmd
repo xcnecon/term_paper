@@ -176,7 +176,7 @@ Regressing the actual $d_cp$ on the predicted $d_cp$ shows a similar $R^2$ as th
 **Rolling-Window VAR Results**
 :::
 
-
+\newpage
 # Conclusion and Limitations
 This project conducted a rolling-window VAR to predict next-quarter corporate profit using variables from the Kalecki-Levy Profit Equation. The high $R^2$ indicates considerable predictive power for such a model. If simply analyzing past data can yield positive results, combining this approach with external forecasts and macroeconomic insights could produce an even more effective predictive model. The findings from this study demonstrate that approaching corporate profit from a *macro perspective* holds great potential compared to the bottom-up approach, which merely aggregates the expected profits of individual firms.
 
