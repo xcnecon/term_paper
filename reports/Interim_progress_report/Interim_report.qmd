@@ -128,9 +128,7 @@ d_{cp,t} = & \ \alpha_{cp} + \sum_{i=1}^{4} \left( \beta_{cp,cp,i} d_{cp,t-i} + 
 \end{aligned}
 $${#eq-var}
 
-Where: $\alpha_{cp}$ is the intercept for the equation; $\beta_{cp,cp,i}, \beta_{cp,ps,i}, \beta_{cp,gs,i}, \beta_{cp,ni,i}, \beta_{cp,fi,i}$ are the coefficients for the lagged values of the endogenous variables at lag $i$; $\gamma_{cp}$ is the coefficient for the exogenous variable (date); $\epsilon_{cp,t}$ is the error term (residual) for $d_{cp,t}$. 
-
-Due to the length limit and our narrow interest on predicting corporate profit, the equations for other variables are not shown here. The result of the regression is in "../results/reg_table_1.txt", and we only present the significant part related to corporate profit here. 
+Where: $\alpha_{cp}$ is the intercept for the equation; $\beta_{cp,cp,i}, \beta_{cp,ps,i}, \beta_{cp,gs,i}, \beta_{cp,ni,i}, \beta_{cp,fi,i}$ are the coefficients for the lagged values of the endogenous variables at lag $i$; $\gamma_{cp}$ is the coefficient for the exogenous variable (date); $\epsilon_{cp,t}$ is the error term (residual) for $d_{cp,t}$. Since the presense of all six variabels would lead to perfect multicolinearity (ie. identity), one of the variables could be dropped without losing any information. Here net dividend is discarded for its relative stability. Due to the length limit and our narrow interest on predicting corporate profit, the equations for other variables are not shown here. The result of the regression is in "../results/reg_table_1.txt", and we only present the significant part related to corporate profit here. 
 
 :::{#tbl-var}
 
