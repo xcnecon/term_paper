@@ -13,19 +13,8 @@ format:
 execute: 
   echo: false
   warning: false     
-author: "Chenning Xu"        
 bibliography: reference.bib
 ---
-
-# Comments
-
-Very Good job. 
-
-Perhaps the only thing I would add its a bit more explanation on your plots. It is not clear why are they interesting or informative. Thinking about the end product, you will want to make sure that if you use a plot/figure, you have a good reason for it, and have something to explain.
-
-I think there needs to be a bit of a change in the motivation. As you mentioned earlier, there is the caveat that the equations you wanted to "test" are tauological. So you need to have a more clear description of why you now want to do predictions, and how that original equations are related to this new goal.
-
-Grade: 10/10
 
 # Introduction
 In capitalism, profits motivate firms to employ labor and produce output for sale [@veblen_theory_1904]. Due to the fundamental uncertainty of the future, firms expect future profits and make investments accordingly, often disproportionately influenced by recent sales and profit conditions. [@keynes_general_1936]. The changes in current and expected future corporate profits significantly affect economic outlooks. Additionally, the valuation of equity in firms is often based on the discounted value of future profits. Lenders extend loans to firms based on their earnings capacity, and the soundness of these loans depends on the profits firms realize in the future [@minsky_financial-instability_1982]. Therefore, profit is seen as one of the most critical concepts in economics and finance. The Kalecki-Levy profit equation is an accounting identity that shows how aggregate corporate profit is determined by economic variables such as investment and government deficits [@levy_where_2008]. This project aims to use the variables in the Kalecki-Levy equation to build a predictive model for the next-quarter corporate profit. 
