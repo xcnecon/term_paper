@@ -93,7 +93,7 @@ label variable c_fi "Foreign Saving (% qoq)"
 label variable c_nd "Net Dividend (% qoq)"
 
 // Step 12: Save the final cleaned quarterly dataset
-cd "$final"  // Navigate to the final data directory
+cd "$processed"  // Navigate to the final data directory
 save "data_quarterly.dta", replace  // Save the final cleaned and processed quarterly data
 
 // ------------------------------------------------------------
@@ -167,5 +167,5 @@ label variable c_fi "Foreign Saving (% qoq)"
 label variable c_nd "Net Dividend (% qoq)"
 
 // Step 20: Save the final cleaned annual dataset
-cd "$final"  // Navigate to the final data directory
+cd "$processed"  // Navigate to the final data directory
 save "data_annual.dta", replace  // Save the final cleaned and processed annual data
