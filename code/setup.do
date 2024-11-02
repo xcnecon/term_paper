@@ -1,5 +1,5 @@
 // set roots
-global root "/Users/chenning/Documents/GitHub/term_paper"
+global root "/Users/chenning/Documents/GitHub/term_paper_"
 global data "$root/data"
 global raw "$data/raw_data"
 global processed "$data/processed_data"
