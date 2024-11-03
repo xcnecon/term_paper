@@ -3,7 +3,7 @@
        log:  /Users/chenning/Documents/GitHub/term_paper_/results/robustness/granger_results.tx
 > t
   log type:  text
- opened on:   1 Nov 2024, 21:23:22
+ opened on:   2 Nov 2024, 18:43:40
 
 . vargranger  // Run Granger causality test
 
@@ -47,5 +47,5 @@
        log:  /Users/chenning/Documents/GitHub/term_paper_/results/robustness/granger_results.tx
 > t
   log type:  text
- closed on:   1 Nov 2024, 21:23:23
+ closed on:   2 Nov 2024, 18:43:41
 -----------------------------------------------------------------------------------------------

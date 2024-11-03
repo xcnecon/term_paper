@@ -1,0 +1,13 @@
+
+|                      |         mean |
+| -------------------- | :----------: |
+| R2 for level 4-80    |     .4872432 |
+| R2 for control level 4-80 |     .1167403 |
+| R2 for pct 4-80      |     .1888433 |
+| R2 for pct control 4-80 |     .0173584 |
+| R2 for level 8-100   |     .6149069 |
+| R2 for control level 8-100 |     .1208536 |
+| R2 for pct 8-100     |     .2844621 |
+| R2 for pct control 8-100 |      .019117 |
+| Observations         |          310 |
+

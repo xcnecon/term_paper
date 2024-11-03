@@ -611,6 +611,6 @@
 | *R*<sup>2</sup> |                 |
 | adj. *R*<sup>2</sup> |                 |
 
-<br>
+Robust std. err. in parenthses<br>
 * *p* < 0.10, ** *p* < 0.05, *** *p* < 0.01
 
