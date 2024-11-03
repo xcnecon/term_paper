@@ -1,0 +1,6 @@
+
+|                      |         R2   |
+| -------------------- | :----------: |
+| R2 for alternative level 4-80 |     .5018473 |
+| R2 for alternative level 8-100 |     .5924271 |
+
