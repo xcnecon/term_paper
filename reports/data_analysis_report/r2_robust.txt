@@ -1,6 +1,9 @@
 
-|                      |         R2   |
+|                      |         mean |
 | -------------------- | :----------: |
-| R2 for alternative level 4-80 |     .5018473 |
-| R2 for alternative level 8-100 |     .5924271 |
+| R2 for pct 12-120    |     .3586333 |
+| R2 for pct 16-160    |      .439759 |
+| R2 for alternative level 4-80 |    -.0127257 |
+| R2 for alternative level 8-100 |    -.0980562 |
+| Observations         |          310 |
 
