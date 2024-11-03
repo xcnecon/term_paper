@@ -609,8 +609,7 @@
 |              |      (0.005)    |
 | *N*          |          283    |
 | *R*<sup>2</sup> |                 |
-| adj. *R*<sup>2</sup> |                 |
 
-Robust std. err. in parenthses<br>
+Robust std. err. in parentheses<br>
 * *p* < 0.10, ** *p* < 0.05, *** *p* < 0.01
 

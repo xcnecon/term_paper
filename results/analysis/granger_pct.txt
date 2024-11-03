@@ -1,10 +1,10 @@
------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /Users/chenning/Documents/GitHub/term_paper_/results/analysis/granger_results.txt
+       log:  /Users/chenning/Documents/GitHub/term_paper_/results/analysis/granger_pct.txt
   log type:  text
- opened on:   1 Nov 2024, 21:24:13
+ opened on:   2 Nov 2024, 23:26:23
 
-. vargranger  // Run Granger causality test
+. vargranger  // Perform Granger causality test
 
    Granger causality Wald tests
   +------------------------------------------------------------------+
@@ -53,9 +53,9 @@
   |              c_nd                ALL |    76.1    40    0.000    |
   +------------------------------------------------------------------+
 
-. log close  // Close log file
+. log close  // End log
       name:  <unnamed>
-       log:  /Users/chenning/Documents/GitHub/term_paper_/results/analysis/granger_results.txt
+       log:  /Users/chenning/Documents/GitHub/term_paper_/results/analysis/granger_pct.txt
   log type:  text
- closed on:   1 Nov 2024, 21:24:15
------------------------------------------------------------------------------------------------
+ closed on:   2 Nov 2024, 23:26:25
+-----------------------------------------------------------------------------------------------------

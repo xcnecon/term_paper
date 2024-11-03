@@ -1,9 +1,8 @@
------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /Users/chenning/Documents/GitHub/term_paper_/results/robustness/granger_results.tx
-> t
+       log:  /Users/chenning/Documents/GitHub/term_paper_/results/analysis/granger_lvl.txt
   log type:  text
- opened on:   2 Nov 2024, 18:43:40
+ opened on:   2 Nov 2024, 23:26:27
 
 . vargranger  // Run Granger causality test
 
@@ -44,8 +43,7 @@
 
 . log close  // Close log file
       name:  <unnamed>
-       log:  /Users/chenning/Documents/GitHub/term_paper_/results/robustness/granger_results.tx
-> t
+       log:  /Users/chenning/Documents/GitHub/term_paper_/results/analysis/granger_lvl.txt
   log type:  text
- closed on:   2 Nov 2024, 18:43:41
------------------------------------------------------------------------------------------------
+ closed on:   2 Nov 2024, 23:26:28
+-----------------------------------------------------------------------------------------------------

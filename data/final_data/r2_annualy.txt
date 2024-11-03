@@ -1,0 +1,9 @@
+
+|                      |         mean |
+| -------------------- | :----------: |
+| R2 for level 4-40    |       .70937 |
+| R2 for alternative level 4-40 |     .7611908 |
+| R2 for level 6-60    |     .9326072 |
+| R2 for alternative level 6-60 |     .8678405 |
+| Observations         |           95 |
+
