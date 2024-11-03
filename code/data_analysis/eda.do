@@ -46,7 +46,7 @@ twoway (line c_cpwi date), title("Corporate Profit %qoq") name(g1, replace)  // 
 twoway (line c_ps date), title("Personal Savings %qoq") name(g2, replace)  // Line plot for personal savings % qoq
 twoway (line c_gs date), title("Government Savings %qoq") name(g3, replace)  // Line plot for government savings % qoq
 twoway (line c_nd date), title("Net Dividend %qoq") name(g4, replace)  // Line plot for net dividend % qoq
-twoway (line c_fi date), title("Foreign Investment %qoq") name(g5, replace)  // Line plot for foreign investment % qoq
+twoway (line c_fi date), title("Foreign Saving %qoq") name(g5, replace)  // Line plot for foreign investment % qoq
 twoway (line c_ni date), title("Net Investment %qoq") name(g6, replace)  // Line plot for net investment % qoq
 
 graph combine g1 g2 g3 g4 g5 g6, col(2)  // Combine the line plots into one graph, arranged in two columns
@@ -59,7 +59,7 @@ twoway (line d_cpwi date), title("Corporate Profit Delta qoq") name(g1, replace)
 twoway (line d_ps date), title("Personal Savings Delta qoq") name(g2, replace)  // Line plot for personal savings delta qoq
 twoway (line d_gs date), title("Government Savings Delta qoq") name(g3, replace)  // Line plot for government savings delta qoq
 twoway (line d_nd date), title("Net Dividend Delta qoq") name(g4, replace)  // Line plot for net dividend delta qoq
-twoway (line d_fi date), title("Foreign Investment Delta qoq") name(g5, replace)  // Line plot for foreign investment delta qoq
+twoway (line d_fi date), title("Foreign Saving Delta qoq") name(g5, replace)  // Line plot for foreign investment delta qoq
 twoway (line d_ni date), title("Net Investment Delta qoq") name(g6, replace)  // Line plot for net investment delta qoq
 
 graph combine g1 g2 g3 g4 g5 g6, col(2)  // Combine the delta qoq line plots into one graph, arranged in two columns

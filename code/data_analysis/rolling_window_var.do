@@ -47,7 +47,7 @@ forvalues i = `start_window'/`end_window' {
     local window_end = `i'  // Rolling window end
     local forecast_period = `i' + 1  // Next quarter forecast
 
-    qui: var c_cpwi c_ps c_gs c_ni c_fi, lags(1/`lags') exog(date)  // VAR model
+    qui: var c_cpwi c_ps c_gs c_ni c_fi c_nd, lags(1/`lags') exog(date)  // VAR model
     qui: predict temp if date == `forecast_period'  // One-step forecast
     qui: replace p_`lags'_`lookback' = temp if date == `forecast_period'  // Save forecast
     qui: drop temp  // Drop temporary variable
@@ -125,7 +125,7 @@ forvalues i = `start_window'/`end_window' {
     local window_end = `i'  // Rolling window end
     local forecast_period = `i' + 1  // Next quarter forecast
 
-    qui: var c_cpwi c_ps c_gs c_ni c_fi, lags(1/`lags') exog(date)  // VAR model
+    qui: var c_cpwi c_ps c_gs c_ni c_fi c_nd, lags(1/`lags') exog(date)  // VAR model
     qui: predict temp if date == `forecast_period'  // One-step forecast
     qui: replace p_`lags'_`lookback' = temp if date == `forecast_period'  // Save forecast
     qui: drop temp  // Drop temporary variable
@@ -200,16 +200,26 @@ forvalues i = 1/10 {
 // Clean up temporary variables
 drop residuals_* ss_residuals_* ss_total_*
 
-label variable d_4_80 "Predicted level change"
-label variable dc_4_80 "Predicted level change"
-label variable d_8_100 "Predicted level change"
-label variable dc_8_100 "Predicted level change"
-label variable p_4_80 "Predicted pct change"
-label variable pc_4_80 "Predicted pct change"
-label variable p_8_100 "Predicted pct change"
-label variable pc_8_100 "Predicted pct change"
-label variable dr_4_80 "Predicted level change"
-label variable dr_8_100 "Predicted level change"
+label variable d_4_80 "level 4-80"
+label variable dc_4_80 "control level 4-80"
+label variable d_8_100 "level 8-100"
+label variable dc_8_100 "control level 8-100"
+label variable p_4_80 "pct 4-80"
+label variable pc_4_80 "pct control 4-80"
+label variable p_8_100 "pct 8-100"
+label variable pc_8_100 "pct control 8-100"
+label variable dr_4_80 "alternative level 4-80"
+label variable dr_8_100 "alternative level 8-100"
+label variable r2_d_4_80 "R2 for level 4-80"
+label variable r2_dc_4_80 "R2 for control level 4-80"
+label variable r2_d_8_100 "R2 for level 8-100"
+label variable r2_dc_8_100 "R2 for control level 8-100"
+label variable r2_p_4_80 "R2 for pct 4-80"
+label variable r2_pc_4_80 "R2 for pct control 4-80"
+label variable r2_p_8_100 "R2 for pct 8-100"
+label variable r2_pc_8_100 "R2 for pct control 8-100"
+label variable r2_dr_4_80 "R2 for alternative level 4-80"
+label variable r2_dr_8_100 "R2 for alternative level 8-100"
 
 cd "$final"
 save "data_quarterly.dta", replace
