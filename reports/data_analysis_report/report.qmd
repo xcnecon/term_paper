@@ -18,6 +18,22 @@ author: "Chenning Xu"
 bibliography: reference.bib
 ---
 
+**Comments**
+
+1.  Sec 3.1. When you say "adjusted" , what do you mean?
+2. Fig 4. what is QoQ
+3. Table 1: Minor detail. I think you should type `**\_cons**` so it renders correctly
+4. Check at the nature of "date". It may not matter much, but if your data is annual, you want to use a "trend" variable that matches that.
+5. For your Granger Causality model, why use model in levels? why not in relative terms? (Share with GDP, or similar)
+
+Grade 15/15
+
+I think at this point you are basically done with the paper.
+Perhaps few things to consider, to clean the write up, and clarify why the need to consider "levels" considering the volatility. 
+
+Since you are doing a Rolling window, for prediction, perhaps worth it to show how your results compare across different models (if you want to do so)
+
+
 # Introduction
 In capitalism, profits motivate firms to employ labor and produce output for sale [@veblen_theory_1904]. Due to the fundamental uncertainty of the future, firms expect future profits and make investments accordingly, often disproportionately influenced by recent sales and profit conditions [@keynes_general_1936]. Changes in current and expected future corporate profits significantly affect economic outlooks. Additionally, the equity valuation in firms is often based on the discounted value of future profits. Lenders extend loans to firms based on their earnings capacity, and the soundness of these loans depends on the profits firms realize in the future [@minsky_financial-instability_1982]. Therefore, profit is seen as one of the most critical concepts in economics and finance. The Kalecki-Levy profit equation is an accounting identity that shows how aggregate corporate profit is determined by economic variables such as investment and government deficits [@levy_where_2008]. This project aims to use the variables in the Kalecki-Levy equation to build a predictive model for the next-quarter corporate profit.
 
