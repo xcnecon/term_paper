@@ -24,3 +24,4 @@ twoway (line p_6_60 date) (line c_cpwi date) if !missing(p_6_60), ///
 
 graph combine g1 g2, col(2)  // Combine the two graphs in 2 columns
 graph export "prediction_annual.png", replace  // Export the combined graph
+
