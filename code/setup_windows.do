@@ -1,4 +1,4 @@
-// Set roots
+// For my windows machine
 global root "C:\Users\CHENY\Documents\GitHub\term_paper"
 global data "$root\data"
 global raw "$data\raw_data"

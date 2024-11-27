@@ -1,0 +1,268 @@
+---
+title: "Predicting Future Corporate Profits with the Kalecki-Levy Equation"
+format: 
+    pdf:
+        documentclass: article 
+        number-sections: true
+        margin-top: 1in
+        margin-bottom: 1in
+        margin-left: 1in
+        margin-right: 1in
+        linestretch:  1.2
+        fontsize: 10pt
+        fig-pos: "H"
+        author: "Chenning Xu"
+bibliography: reference.bib
+---
+
+# Introduction
+In capitalism, profits motivate firms to employ labor and produce output for sale [@veblen_theory_1904]. Due to the fundamental uncertainty of the future, firms expect future profits and make investments accordingly, often disproportionately influenced by recent sales and profit conditions [@keynes_general_1936]. Changes in current and expected future corporate profits significantly affect economic outlooks. Additionally, the equity valuation in firms is often based on the discounted value of future profits. Lenders extend loans to firms based on their earnings capacity, and the soundness of these loans depends on the profits firms realize in the future [@minsky_financial-instability_1982]. Therefore, profit is seen as one of the most critical concepts in economics and finance. The Kalecki-Levy profit equation is an accounting identity that shows how aggregate corporate profit is determined by economic variables such as investment and government deficits [@levy_where_2008]. This project aims to use the variables in the Kalecki-Levy equation to build a predictive model for the next-quarter corporate profit.
+
+# Theoretical Background
+## Kalecki-Levy Profit Equation
+@levy_where_2008 presented a stylized Kalecki-Levy equation for open economies (signs of RHS variables are adjusted here according to the National Income and Product Accounts (NIPA) accounting convention):
+$$
+\begin{aligned}
+\text{Profit after tax} &= \text{Net Investment} \\
+ &\phantom{=} - \text{Personal Saving} \\
+ &\phantom{=} + \text{Foreign Saving} \\
+ &\phantom{=} - \text{Government Saving}\\
+ &\phantom{=} + \text{Net Dividend}
+\end{aligned}
+$$ {#eq-pq}
+
+The Kalecki-Levy equation, as an accounting identity, is tautologically true. Here is the proof:
+$$ I = S = PS + CS + FS + GS$$
+$$ I = PS + (CP - ND) + FS + GS$$
+$$ CP = I - PS - FS - GS + ND$$
+where *I* is net investment (gross investment - depreciation), *S* is net saving, *PS* is personal saving, *CS* is corporate saving, *FS* is foreign saving, *GS* is government saving, *CP* is net corporate profit, and *ND* is net dividend (total dividend excluding dividends paid to firms). Since *Foreign Saving* is recorded as a negative figure in the NIPA account, after flipping its sign, we get @eq-pq. For technical details, please refer to @bea_nipa_2024.
+
+Since the above analysis is purely an accounting analysis, it does not imply any behavioral relations or causality. However, Minsky argued that the RHS determines corporate profit, not vice versa. The straightforward explanation for investment causing profit is that firms cannot control future profit but can determine how much they invest in the next quarter based on their expectations of future economic conditions. Please refer to Minsky (1986, Chapter 2) for a detailed analysis.
+
+## Research Motivation
+Given the Kalecki-Levy framework for profit determination, a key motivation of this study is to explore how the relationships defined in these identities might serve as practical tools for prediction rather than merely theoretical constructs. While the original equations hold by definition, leveraging them in a predictive model allows us to investigate whether observable trends in the determinants of profit—and profit itself—can reliably signal changes in future corporate profit.
+
+For example, does a consistent increase in net investment over the past year suggest momentum that could continue into the next quarter, thereby boosting profits? Similarly, could a high personal saving rate over several quarters indicate an upcoming decline, indirectly increasing corporate profit? Although prior research, such as @trofimov_determinants_2022, utilized panel VAR to assess the impact of profit determinants on profit margins—finding a positive effect from trade surpluses and a negative one from government deficits—such studies have not applied these equations in a forward-looking, predictive context. By employing a rolling-window Vector Auto-Regression (VAR) model, this project aims explicitly to predict corporate profit for the next quarter. This method leverages both historical values of profit and its key determinants, building on the identity to test its predictive utility, as discussed in the next section.
+
+
+# Data
+The quarterly and annual series of corporate profit, personal savings, foreign savings, government savings, and net dividends are collected from NIPA (https://www.bea.gov/itable/national-gdp-and-personal-income). The monthly S&P 500 earnings series are collected from Robert Shiller.
+(http://www.econ.yale.edu/~shiller/data.htm). Currently, only the quarterly series of NIPA is explored.
+
+## Exploratory Data Analysis: Identity
+:::{#fig-fig1}
+
+![](../../results/eda/identity.png){width=75% fig-align=center}
+
+Identity between Corporate Profit and RHS
+:::
+
+This graph shows that the Kalecki-Levy equation holds in the NIPAs. The left graph shows the close relationship between corporate profit and the sum of the RHS. Since, by accounting definition, the investment must equal savings, in the NIPAs, the measuring residual between investment and savings is attributed to the statistical discrepancy term. The right graph shows the exact identity between corporate profit and the RHS after adjusting for the statistical discrepancy term in the NIPA, which confirms that the validity of the Kalecki Equation follows directly from the identity between investment and savings, as in @eq. In later sections of this essay, by default, it uses corporate earnings adjusted by this statistical discrepancy term, but adjusting for the discrepancy or not makes no difference to the results. Exploratory data analysis is presented below.
+
+## Exploratory Data Analysis: Stationarity
+:::{#fig-fig2}
+
+![](../../results/eda/series.png){width=75% fig-align=center}
+
+Time-Series of the Variables in Kalecki-Levy Equation
+:::
+
+This graph shows that all six variables in the Kalecki-Levy equation trend with time and are therefore not stationary. For time series analysis, detrending the variables is necessary.
+
+:::{#fig-fig3}
+
+![](../../results/eda/series_level.png){width=75% fig-align=center}
+
+Detrending the variables - Quarterly Level change
+:::
+
+:::{#fig-fig4}
+
+![](../../results/eda/series_pct.png){width=75% fig-align=center}
+
+Detrending the variables - Quarterly Pct change
+
+:::
+
+The results of Phillips-Perron unit root tests reject the null hypothesis with p-values under 0.001 for all six variables in both approaches, indicating that they do not follow a random walk. No obvious trend could be observed in both graphs. However, two approaches to detrending come with their advantages and disadvantages.
+
+@fig-fig3 shows the quarter-on-quarter difference of the six variables. For some variables, such as corporate profit, net dividend, foreign savings, and net investment, there appears to be an increasing standard deviation. @fig-fig4 shows the quarter-on-quarter percentage change of the six variables. There appears to be no increasing standard deviation. However, this approach produces highly volatile outcomes, with some changes over 1000%. When these variables change signs, the percentage change will always be negative, not necessarily indicating a decline of magnitude. Besides, if the relative magnitude of the RHS variables changes over time, using percentage change may not capture structural shifts.
+
+The difficulty of capturing structural change could be mitigated by using a smaller training sample in the later rolling-window VAR tests. However, for the level changes, increasing standard deviation remains a big issue; even if the sample is smaller, the magnitude of the variable could still change a lot in years. For the percentage changes, high volatility and sign changes in the percentage change approach remain problems. Since the two approaches have their advantages and disadvantages, both approaches are applied to predictions, and in the next section, it is found that percentage changes do much better for either explanation or prediction purposes. For the completeness of the presentation, the results of both approaches are presented. 
+
+
+# Methodology and Analysis
+## VAR and Granger Causality Tests
+Vector autoregressions[@bekes_data_2021, p. 505] are conducted on the entire dataset, using both level and percentage difference variables, followed by Granger causality tests[@noauthor_granger_2024]. This study does not transform the variables into relative terms such as deficit / GDP since the interest here is how the variables in the Kalecki Equation cause changes in future corporate profit, not how they change the share of profit in the GDP. For how the variables here impact profit margin, see @trofimov_determinants_2022. 
+
+
+The results for percentage changes with eight lags of endogenous variables and time as an exogenous variable are presented below. The mathematical model is expressed as:
+
+$$
+\begin{aligned}
+p_{cp,t} = & \ \alpha_{cp} + \sum_{i=1}^{8} \left( \beta_{cp,cp,i} p_{cp,t-i} + \beta_{cp,ps,i} p_{ps,t-i} + \beta_{cp,gs,i} p_{gs,t-i}\right. \\
+ & \ \left. + \beta_{cp,ni,i} p_{ni,t-i} + \beta_{cp,fi,i} p_{fi,t-i} + \beta_{cp,nd,i} p_{nd,t-i} + \gamma_{cp} \cdot \text{date}_t + \epsilon_{cp,t}\right) \\
+\end{aligned}
+$${#eq-var}
+
+where $\alpha_{cp}$ is the intercept, $\beta_{cp,*,i}$ are coefficients for lagged endogenous variables, $\gamma_{cp}$ is the time coefficient, and $\epsilon_{cp,t}$ is the error term. Only the corporate profit equation is shown, as our primary interest is in profit prediction.
+
+:::{#tbl-tbl1}
+
+{{< include pct_var.txt >}}
+
+VAR Results for @eq-var
+
+:::
+
+Only significant coefficients are reported. Lags are denoted by L#, indicating the number of quarters past (e.g., L3.c_ps is the percentage change in personal savings from three quarters ago).
+
+The results in @tbl-tbl1 are complex to interpret. Lagged changes in corporate profit do not correlate with next-quarter profit changes. Personal saving shows a short-term positive correlation with profit changes, shifting to negative over time. Government savings (typically negative, implying a deficit) and net investment display a positive correlation with profit changes after a delay of at least one year. Foreign saving (often negative, reflecting a current account deficit) is negatively correlated with profit change in the short run but has a consistent positive correlation over the longer term. Finally, net dividends exhibit a short-term negative correlation with profit changes, turning positive over a longer horizon. Given that this model includes six variables with eight lags each (a total of 48 lagged variables), caution is advised when interpreting p-values, even with robust standard errors. The model explains approximately 26% of next-quarter profit variation, but without out-of-sample testing, overfitting remains a risk.
+
+The Granger causality test for @eq-var (not reported) suggests that, except for net investment, we can reject the null hypothesis that the independent variables do not Granger-cause percentage changes in corporate profit. Notably, none of the variables Granger-cause government saving, indicating it may behave autonomously in our sample.
+
+For the model using level changes, the mathematical formula is:
+
+$$
+\begin{aligned}
+d_{cp,t} = & \ \alpha_{cp} + \sum_{i=1}^{8} \left( \beta_{cp,cp,i} d_{cp,t-i} + \beta_{cp,ps,i} d_{ps,t-i} + \beta_{cp,gs,i} d_{gs,t-i} \right. \\
+ & \ \left. + \beta_{cp,ni,i} d_{ni,t-i} + \beta_{cp,fi,i} d_{fi,t-i} + \gamma_{cp} \cdot \text{date}_t + \epsilon_{cp,t} \right) \\
+\end{aligned}
+$${#eq-var2}
+
+The model using level changes requires dropping one of the RHS variables due to perfect multicollinearity. Net dividend is excluded here for its relative stability. In the robustness checks, other variables may be tested for exclusion. The VAR results for @eq-var2 are not reported, as the Granger causality test failed to reject any null hypothesis, and very few coefficients were statistically significant. This limited significance may be attributed to the increasing standard deviation, resulting in high heteroskedasticity-robust standard errors. 
+
+## Rolling-Window VAR
+To mimic the real-life prediction process, rolling-window VAR tests are performed using smaller sets of training data to predict next-quarter corporate profit changes. This approach mitigates the risk of structural changes and, to some extent, the issue of increasing standard deviation. The $R^2$ values from tests using both level and percentage change data are reported here, with more models using other specifications in the later robustness check section.
+
+$R^2$ for models using level changes are calculated by transforming the predicted level changes into percentage change predictions using the formula below:
+
+$$ 
+\text{PredictedPctChange}_t = \frac{\text{PredictedLevelChange}_t}{\text{CorporateProfit}_{t-1}} 
+$$
+
+The $R^2$ is then calculated as:
+
+$$
+R^2 = 1 - \frac{\sum_{t} \left( \text{ActualPctChange}_t - \text{PredictedPctChange}_t \right)^2}{\sum_{t} \left( \text{ActualPctChange}_t - \overline{\text{ActualPctChange}} \right)^2}
+$$
+
+It is important to perform this transformation, as both the series of predicted level changes and actual level changes of corporate profit have increasing standard deviations. Without this adjustment, $R^2$ could be high but spurious. By converting predicted level changes into percentage terms, the increasing standard deviation could be removed and the predictive power across models can be easily compared. 
+
+:::{#tbl-tbl2}
+
+{{< include r2.txt >}}
+
+Rolling-Window VARs
+
+:::
+
+@tbl-tbl2 presents $R^2$ from four rolling-window VAR models and two control models, which include only lagged changes in corporate profit and time. Here, 'pct 8-100' means that the model uses percentage changes with eight lags and 100 lookback periods. Notably, the two models using level changes do not possess any predictive power, even though they slightly outperform their control models (not reported). Pct 4-80 predicted 19.1% of the variations of next-quarter corporate profit, and Pct 8-100 predicted 28.5%. Both significantly outperformed their control models, which barely have any predictive power. 
+
+
+:::{#fig-fig5}
+
+![](../../results/analysis/prediction.png){width=100% fig-align=center}
+
+Prediction Series
+:::
+
+@fig-fig5 displays the prediction series of the four models in @tbl-tbl2 alongside the actual level and percentage change in corporate profit. It shows that the two models using level changes consistently gave volatile predictions. This is expected since the two models have to fit the later part of training models whose standard deviation is larger, and thus, its prediction for the earlier part of the training data would tend to be more volatile. Meanwhile, the two models using percentage changes could only capture part of the variation in the next-quarter profit, and the prediction series tends to be more stable than the actual series. This observation is consistent with @tbl-tbl3, even though it turns out that even the perceived volatile series could not match the volatility of the actual series.
+
+
+:::{#tbl-tbl3}
+
+{{< include sum_stats.txt >}}
+
+Summary Statistics
+:::
+
+
+# Robustness
+To enhance the robustness of this study, more models of various specifications are presented in this section, and the application of some models is extended to annual data. 
+
+## More Specification
+Two more models using percentage changes (12-120 and 16-160) are presented. Two more models using level changes are presented, which dropped net investment as an independent variable instead of a net dividend, for the fact that in @tbl-tbl1, the Granger causality test could not reject the null hypothesis for net investment. 
+
+:::{#tbl-tbl4}
+
+{{< include r2_robust.txt >}}
+
+$R^2$ for more models
+:::
+
+@tbl-tbl4 shows that the predictive power of the models using percentage changes keeps improving when the number of lags and observations used for model training increases. The pct 16-160 model could predict 44% of the variations of next-quarter profit change. This shows that the impact of the variables in the Kalecki-Levy equation on future corporate profit could be cumulative. Meanwhile, the two models using level changes still could not possess any predictive power with negative $R^2$. 
+
+
+## Annual Data
+Three models using percentage changes are applied to the annual NIPA series, with results presented below.
+
+:::{#tbl-tbl5}
+
+{{< include r2_robust_annual.txt >}}
+
+Rolling-window VAR for Annual Data
+:::
+
+
+:::{#fig-fig6}
+
+![](../../results/robustness/prediction_annual.png){width=100% fig-align=center}
+
+Prediction Series for Annual Data
+:::
+
+
+@tbl-tbl5 shows that the 6-60 model has a very high $R^2$, and @fig-fig6 shows that it got almost all the major directional moves correct. However, for the 4-40 model, the result is unsatisfactory. Compared to the slightly improved result of 4-60 and the findings in @tbl-tbl4, it is speculated that 40 obs for model training might be insufficient. A large enough number of lags and observations for model training is essential for the success of the models. 
+
+
+## Predicting SP500 Earnings
+This section tests the external validity of the rolling-window regression model by predicting the next-quarter SP500 earnings. SP500 is a equity index, which has no earnings, but by adding the earnings of its consistents by proportion, it has a hypothetical earnings. Although the earnings of SP500 is different from the corporate profit item in NIPAs, for many reasons such as SP500 only contains the largets 500 companies and that a portion of the earnings of SP500 comes from abroad. Nevertheless, they usually change in the same direction. 
+
+:::{#fig-fig7}
+
+![](../../results/robustness/SPvsNIPAs.png){width=75% fig-align=center}
+
+SP500 earnings vs NIPA corporate profits
+:::
+
+The equation for the model differs slightly from @eq-var by substituting the NIPA corporate profits with SP500 earnings on both sides of the equation. Some of the results are presented below. 
+
+:::{#tbl-tbl6}
+
+{{< include r2_sp.txt >}}
+
+R2 for predicting next-quarter SP500 earnings
+:::
+
+The $R^2$ is even higher for predicting SP500 earnings than NIPA's corporate profit, and it also confirms that model performance increases with the number of lags and lookback periods. 
+
+
+## A Bottom-up Approach
+The most valuable insight provided by the Kalecki-Levy equation is that,forecasting the RHS variables can yield a forecast for corporate profit by identity. It allows us to conduct some contrained prediction, for example, if the government intends to cut deficit, if (net) investment, consumption (- personal savings) and net export could not increase to make up the lost profit, then corporate profit must decline. Such an argument does not require additional assumptions and has no ambiguity.  
+
+
+This section tries to use the endogenous variables in the Kalecki equation to predict the RHS variables and then predict the next-quarter profit by adding the predicted change of the RHS variables. The performance of predicting the RHS variables is presented below. 
+
+:::{#tbl-tbl7}
+
+{{< include r2_bu.txt >}}
+
+R2 for predicting the RHS variables
+:::
+
+@tbl-tbl7 shows that except for government saving, the RHS variables have some predictability, but government saving (i.e., deficit) is completely unpredictable. The predicted series of government savings is extremely volatile, which shows that deficit spending is probably autonomous in this system. The prediction for corporate rate by adding the predicted components of corporate profit up is a total failure. The predicted series of the quarterly percentage change of corporate profit is significantly more volatile than the actual series and makes little sense. 
+
+
+This section shows that although we can use the variables in the Kalecki Equation to predict the next-quarter corporate profit, trying to predict the components using the variables alone and then adding them up is not going to work. It will be much more sensible to use more theoretical models and more data to model the components, such as using long-term interest rates, stock market multiples, and business confidence to predict net investment, and then try to add up the predicted components. This would be beyond the scope of this study, but the validity of the Kalecki Equation ensures that if the predictions of the profit components are accurate, then the profit prediction must also be accurate. 
+
+
+# Conclusion
+This project has conducted VAR and Granger causality tests to investigate whether the variables in the Kalecki-Levy equation have lead-lag relations, which turned out to be complicated and have no straightforward interpretation. This project designed rolling-window VAR models to mimic real-life prediction processes and gained considerable success. It has shown that using percentage changes is much more effective than using level differences in rolling-window VAR prediction.  It has also shown that this approach applies to predicting both the corporate profit in the NIPAs and the SP500 earnings. 
+
+The high $R^2$ of the rolling-window VAR models indicates considerable predictive power for such a model. If simply analyzing past data can yield positive results, combining this approach with external forecasts and macroeconomic insights could produce an even more effective predictive model. The findings from this study demonstrate that approaching corporate profit from a *macro perspective* holds great potential compared to the bottom-up approach, which merely aggregates the expected profits of individual firms.
+
+This project has some limitations. For example, by using a rolling-window model, there is limited information on *how* the lagged variables predict next-quarter corporate profit, aside from their overall effectiveness. Besides, the forecasting models in this essay are not practically useful for the actual forecasting of future profits since the NIPA data are published with a lag, so when all data are available for predictions, the next quarter's NIPA data will come out very soon, and likely some SP500 companies are already publishing earnings. Although this project can be extended to predicting the second quarter profits, it might lose accuracy. In real practice, it would make more sense to use more sophisticated models to predict individual components of profit and then add them up by the Kalecki-Levy Equation, which, however, the heroic models in this essay could not do so. 
+
+
+# References

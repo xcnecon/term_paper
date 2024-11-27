@@ -1,0 +1,9 @@
+|      Dep Var          |         R2   |
+| -------------------- | :----------: |
+| Government saving    |     -.1430996 |
+| Personal saving    |      .2360006 |
+| Net Investment |     .3381232 |
+| Foreign saving |     .2146015 |
+| Net Dividend |     .4166412 |
+| Corporate Profit | -71.05025      |
+

@@ -35,7 +35,6 @@ order date  // Move date to the first column
 
 // Step 7: Calculate Quarterly Stock Price Return
 destring price, replace  // Ensure 'price' is numeric
-gen return = (price - price[_n-1]) / price[_n-1]  // Calculate % change in price
 
 // Step 8: Save Processed Quarterly Data
 cd "$processed"

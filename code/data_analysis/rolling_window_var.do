@@ -131,6 +131,7 @@ forvalues i = `start_window'/`end_window' {
     qui: replace p_`lags'_`lookback' = temp if date == `forecast_period'  // Save forecast
     qui: drop temp  // Drop temporary variable
 }
+
 // R-squared calculations
 replace d_4_80 = d_4_80 / l.cpwi
 replace d_8_100 = d_8_100 / l.cpwi
@@ -341,19 +342,22 @@ foreach dep in `dep_vars' {
     local ss_tot = r(sum)
 
     qui: replace r2_`dep' = 1 - (`ss_res' / `ss_tot')
+}
 
 foreach dep in `dep_vars' {
     label variable pred_`dep' "Predicted `dep'"
     label variable r2_`dep' "R2 for `dep'"
 }
 
-gen pred_d_cpwi = l.gs * pred_c_gs + l.ps * (pred_c_ps) + l.ni * (pred_c_ni) + l.fi * (pred_c_f}
-
-// Clean up temporary variables
 drop residuals_* ss_residuals_* ss_total_*
 
-// Add variable labels for clarityi) + l.nd * (pred_c_nd)
+// add up components to calculate the next quarter corproate profit
+gen pred_d_cpwi = l.gs * pred_c_gs + l.ps * pred_c_ps + l.ni * pred_c_ni + l.fi *pred_c_f + l.nd * pred_c_nd
 gen pred_c_cpwi = pred_d_cpwi / l.cpwi
+label variable pred_d_cpwi "Predicted level change of the next quarter corporate profits"
+label variable pred_c_cpwi "Predicted Pct Change of the next quarter corporate profits"
+
+// calcualte r2 for the profit prediction
 gen residuals = c_cpwi - pred_c_cpwi if !missing(c_cpwi, pred_c_cpwi)
 gen ss_residuals = residuals^2 if !missing(residuals)
 sum ss_residuals if !missing(ss_residuals)
@@ -363,9 +367,115 @@ local mean_c_cpwi = r(mean)
 gen ss_total = (c_cpwi - `mean_c_cpwi')^2 if !missing(c_cpwi)
 sum ss_total if !missing(ss_total)
 local ss_tot = r(sum)
-gen bu_r2 = 1 - (`ss_res' / `ss_tot')
-drop residuals ss_residuals ss_total
+gen r2_bu = 1 - (`ss_res' / `ss_tot')
+label variable r2_bu "R2 for the bottom-up apporach"
+drop residuals ss_residuals ss_total pred_d_cpwi pred_c_cpwi
 
-// Save the annual data file
 cd "$final"
+save "data_quarterly.dta", replace
+
+
+// predict sp500 earnings
+use "data_quarterly.dta", clear
+local lookback = 100  
+local lags = 8
+local start_window = tq(1947q1) + `lookback' - 1
+local end_window = tq(2024q1)
+
+gen pred_spe = .
+gen c_spe = earnings / l.earnings - 1
+
+forvalues i = `start_window'/`end_window' {    
+    local window_start = `i' - `lookback' + 1  // Rolling window start
+    local window_end = `i'  // Rolling window end
+    local forecast_period = `i' + 1  // Next quarter forecast
+    qui: regress c_spe L(1/`lags').c_spe L(1/`lags').c_ps L(1/`lags').c_gs L(1/`lags').c_ni L(1/`lags').c_fi L(1/`lags').c_nd date
+    qui: predict temp if date == `forecast_period'  // One-step forecast
+    qui: replace pred_spe = temp if date == `forecast_period'  // Save forecast
+    qui: drop temp  // Drop temporary variable
+}
+
+// calcualte r2 for the prediction
+gen residuals_spe = c_spe - pred_spe if !missing(c_spe, pred_spe)
+gen ss_residuals_spe = residuals_spe^2 if !missing(residuals_spe)
+sum ss_residuals_spe if !missing(ss_residuals_spe)
+local ss_res_spe = r(sum)
+sum c_spe if !missing(c_spe, pred_spe)
+local mean_c_spe = r(mean)
+gen ss_total_spe = (c_spe - `mean_c_spe')^2 if !missing(c_spe)
+sum ss_total_spe if !missing(ss_total_spe)
+local ss_tot_spe = r(sum)
+gen r2_spe_8_100 = 1 - (`ss_res_spe' / `ss_tot_spe')
+label variable r2_spe_8_100 "R2 for the SP500 earnings prediction 8-100"
+drop residuals_spe ss_residuals_spe ss_total_spe pred_spe c_spe
+save "data_quarterly.dta", replace
+
+// try another specification
+use "data_quarterly.dta", clear
+local lookback = 80  
+local lags = 4
+local start_window = tq(1947q1) + `lookback' - 1
+local end_window = tq(2024q1)
+
+gen pred_spe = .
+gen c_spe = earnings / l.earnings - 1
+
+forvalues i = `start_window'/`end_window' {    
+    local window_start = `i' - `lookback' + 1  // Rolling window start
+    local window_end = `i'  // Rolling window end
+    local forecast_period = `i' + 1  // Next quarter forecast
+    qui: regress c_spe L(1/`lags').c_spe L(1/`lags').c_ps L(1/`lags').c_gs L(1/`lags').c_ni L(1/`lags').c_fi L(1/`lags').c_nd date
+    qui: predict temp if date == `forecast_period'  // One-step forecast
+    qui: replace pred_spe = temp if date == `forecast_period'  // Save forecast
+    qui: drop temp  // Drop temporary variable
+}
+
+// calcualte r2 for the prediction
+gen residuals_spe = c_spe - pred_spe if !missing(c_spe, pred_spe)
+gen ss_residuals_spe = residuals_spe^2 if !missing(residuals_spe)
+sum ss_residuals_spe if !missing(ss_residuals_spe)
+local ss_res_spe = r(sum)
+sum c_spe if !missing(c_spe, pred_spe)
+local mean_c_spe = r(mean)
+gen ss_total_spe = (c_spe - `mean_c_spe')^2 if !missing(c_spe)
+sum ss_total_spe if !missing(ss_total_spe)
+local ss_tot_spe = r(sum)
+gen r2_spe_4_80 = 1 - (`ss_res_spe' / `ss_tot_spe')
+label variable r2_spe_4_80 "R2 for the SP500 earnings prediction 4-80"
+drop residuals_spe ss_residuals_spe ss_total_spe pred_spe c_spe
+save "data_quarterly.dta", replace
+
+// try another specification
+use "data_quarterly.dta", clear
+local lookback = 120
+local lags = 12
+local start_window = tq(1947q1) + `lookback' - 1
+local end_window = tq(2024q1)
+
+gen pred_spe = .
+gen c_spe = earnings / l.earnings - 1
+
+forvalues i = `start_window'/`end_window' {    
+    local window_start = `i' - `lookback' + 1  // Rolling window start
+    local window_end = `i'  // Rolling window end
+    local forecast_period = `i' + 1  // Next quarter forecast
+    qui: regress c_spe L(1/`lags').c_spe L(1/`lags').c_ps L(1/`lags').c_gs L(1/`lags').c_ni L(1/`lags').c_fi L(1/`lags').c_nd date
+    qui: predict temp if date == `forecast_period'  // One-step forecast
+    qui: replace pred_spe = temp if date == `forecast_period'  // Save forecast
+    qui: drop temp  // Drop temporary variable
+}
+
+// calcualte r2 for the prediction
+gen residuals_spe = c_spe - pred_spe if !missing(c_spe, pred_spe)
+gen ss_residuals_spe = residuals_spe^2 if !missing(residuals_spe)
+sum ss_residuals_spe if !missing(ss_residuals_spe)
+local ss_res_spe = r(sum)
+sum c_spe if !missing(c_spe, pred_spe)
+local mean_c_spe = r(mean)
+gen ss_total_spe = (c_spe - `mean_c_spe')^2 if !missing(c_spe)
+sum ss_total_spe if !missing(ss_total_spe)
+local ss_tot_spe = r(sum)
+gen r2_spe_12_120 = 1 - (`ss_res_spe' / `ss_tot_spe')
+label variable r2_spe_12_120 "R2 for the SP500 earnings prediction 8-120"
+drop residuals_spe ss_residuals_spe ss_total_spe pred_spe c_spe
 save "data_quarterly.dta", replace
