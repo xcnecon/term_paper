@@ -47,7 +47,7 @@ For example, does a consistent increase in net investment over the past year sug
 
 # Data
 The quarterly and annual series of corporate profit, personal savings, foreign savings, government savings, and net dividends are collected from NIPA (https://www.bea.gov/itable/national-gdp-and-personal-income). The monthly S&P 500 earnings series are collected from Robert Shiller.
-(http://www.econ.yale.edu/~shiller/data.htm). Currently, only the quarterly series of NIPA is explored.
+(http://www.econ.yale.edu/~shiller/data.htm). 
 
 ## Exploratory Data Analysis: Identity
 :::{#fig-fig1}
@@ -121,16 +121,7 @@ The results in @tbl-tbl1 are complex to interpret. Lagged changes in corporate p
 
 The Granger causality test for @eq-var (not reported) suggests that, except for net investment, we can reject the null hypothesis that the independent variables do not Granger-cause percentage changes in corporate profit. Notably, none of the variables Granger-cause government saving, indicating it may behave autonomously in our sample.
 
-For the model using level changes, the mathematical formula is:
-
-$$
-\begin{aligned}
-d_{cp,t} = & \ \alpha_{cp} + \sum_{i=1}^{8} \left( \beta_{cp,cp,i} d_{cp,t-i} + \beta_{cp,ps,i} d_{ps,t-i} + \beta_{cp,gs,i} d_{gs,t-i} \right. \\
- & \ \left. + \beta_{cp,ni,i} d_{ni,t-i} + \beta_{cp,fi,i} d_{fi,t-i} + \gamma_{cp} \cdot \text{date}_t + \epsilon_{cp,t} \right) \\
-\end{aligned}
-$${#eq-var2}
-
-The model using level changes requires dropping one of the RHS variables due to perfect multicollinearity. Net dividend is excluded here for its relative stability. In the robustness checks, other variables may be tested for exclusion. The VAR results for @eq-var2 are not reported, as the Granger causality test failed to reject any null hypothesis, and very few coefficients were statistically significant. This limited significance may be attributed to the increasing standard deviation, resulting in high heteroskedasticity-robust standard errors. 
+The model using level changes requires dropping one of the RHS variables due to perfect multicollinearity. Net dividend is excluded here for its relative stability. In the robustness checks, other variables may be tested for exclusion. The VAR results are not reported, as the Granger causality test failed to reject any null hypothesis, and very few coefficients were statistically significant. This limited significance may be attributed to the increasing standard deviation, resulting in high heteroskedasticity-robust standard errors. 
 
 ## Rolling-Window VAR
 To mimic the real-life prediction process, rolling-window VAR tests are performed using smaller sets of training data to predict next-quarter corporate profit changes. This approach mitigates the risk of structural changes and, to some extent, the issue of increasing standard deviation. The $R^2$ values from tests using both level and percentage change data are reported here, with more models using other specifications in the later robustness check section.
@@ -262,7 +253,7 @@ This project has conducted VAR and Granger causality tests to investigate whethe
 
 The high $R^2$ of the rolling-window VAR models indicates considerable predictive power for such a model. If simply analyzing past data can yield positive results, combining this approach with external forecasts and macroeconomic insights could produce an even more effective predictive model. The findings from this study demonstrate that approaching corporate profit from a *macro perspective* holds great potential compared to the bottom-up approach, which merely aggregates the expected profits of individual firms.
 
-This project has some limitations. For example, by using a rolling-window model, there is limited information on *how* the lagged variables predict next-quarter corporate profit, aside from their overall effectiveness. Besides, the forecasting models in this essay are not practically useful for the actual forecasting of future profits since the NIPA data are published with a lag, so when all data are available for predictions, the next quarter's NIPA data will come out very soon, and likely some SP500 companies are already publishing earnings. Although this project can be extended to predicting the second quarter profits, it might lose accuracy. In real practice, it would make more sense to use more sophisticated models to predict individual components of profit and then add them up by the Kalecki-Levy Equation, which, however, the heroic models in this essay could not do so. 
+This project has some limitations. For example, by using a rolling-window model, there is limited information on *how* the lagged variables predict next-quarter corporate profit, aside from their overall effectiveness. Besides, the forecasting models in this essay are not practically useful for the actual forecasting of future profits since the NIPA data are published with a lag, so when all data are available for predictions, the next quarter's NIPA data will come out very soon, and likely some SP500 companies are already publishing earnings. Although this project can be extended to predicting the second quarter profits, it might lose accuracy. In real practice, it would make more sense to use more sophisticated models to predict individual components of profit and then add them up by the Kalecki-Levy Equation, which, however, the heroic model in this essay could not do so. 
 
 
 # References
