@@ -1,0 +1,137 @@
+---
+title: "Predicting Future Corporate Profits with the Kalecki-Levy Equation"
+author: "Chenning Xu"
+format: 
+  revealjs:
+    theme: [default, clean2.scss]
+    embed-resources: true
+    slide-number: true
+    show-slide-number: all
+    width:  1000  
+    height: 600
+---
+
+## Why is profit important?
+
+- We live in a monetary economy. 
+- Firms produce and invest for profit, which, through multiplier, affects aggregate income and employment. Fluctuations in profit lead to economic cycles. (Veblen, Keynes)
+- Non-financial firms need profit to service debt. Collapse in profit leads to financial instability (Minsky)
+- Profit is the most essential factor in asset pricing. However, analysts only focus on the profit of individual firms, not the aggregate profit. Individual firms can only get a share of the aggregate profit. 
+- How do we study and model aggregate profit? The Kalcki-Levy equation provides insights. 
+
+## The Kalecki-Levy Equation
+
+- Discovered first by Jerome Levy and then Kalecki independently. 
+- As in Randy's class, we know profit = investment - gov savings - foreign savings + consumption financed by profit - saving out of wage. 
+- For the availability of data, arranging the terms, we get profit = investment - gov saving - foreign saving + dividend - household savings (RHS). 
+- Monetary profit could not occur without balance-sheet expansion. 
+
+## Identity between profit and the RHS in the NIPAs
+![](../../results/eda/identity.png)
+
+## Motivation
+- If we know how to decompose profit, can we use the past data of the constituents of profit to predict future profit? 
+- Use VAR and Granger causality tests to uncover the predictive power of each constituent of the next-quarter profit. 
+- Use the rolling window to test how well the prediction models perform in practice. 
+
+## Data Preview
+![](../../results/eda/series.png)
+
+## Data Manipulation
+- Clearly, all the variables trend with time. Percentage change transformation is applied to remove the trend. 
+- Level change transformation suffers from strong heteroskedasticity because the volatility of the transformed variables increases with time. Percentage transformation is also not trouble-free since the transformed series are usually very volatile. 
+- Quarterly data is presented here first. In the later robustness section, yearly data and alternative data will be used. 
+
+## VAR and Granger Causality
+- 8 lags are used, which means using the last eight quarter data to predict the next quarter. 
+- The entire dataset of 310 quarters from 1947 to 2024 is used. 
+The target variable is profit, and the independent variable is past profit, past RHS variables, and date.
+
+$$
+\begin{aligned}
+p_{cp,t} = & \ \alpha_{cp} + \sum_{i=1}^{8} \left( \beta_{cp,i} p_{cp,t-i} + \beta_{ps,i} p_{ps,t-i} + \beta_{gs,i} p_{gs,t-i}\right. \\
+ & \ \left. + \beta_{ni,i} p_{ni,t-i} + \beta_{fi,i} p_{fi,t-i} + \beta_{nd,i} p_{nd,t-i}\right. \\
+ & \ \left. + \gamma_{cp} \cdot \text{date}_t + \epsilon_{cp,t}\right) \\
+\end{aligned}
+$${#eq-var}
+
+
+## VAR and Granger Causality
+| Equation       | Excluded        | chi2   | df | Prob > chi2 |
+|----------------|-----------------|--------|----|-------------|
+| Profit         | Personal Saving | 23.069 |  8 | 0.003       |
+| Profit         | Government Saving | 16.663 |  8 | 0.034       |
+| Profit         | Net Investment  | 11.243 |  8 | 0.188       |
+| Profit         | Foreign Saving  | 41.810 |  8 | 0.000       |
+| Profit         | Net Dividend    | 19.697 |  8 | 0.012       |
+| Profit         | ALL             | 137.39 | 40 | 0.000       |
+
+The null hypothesis is that a variable does not guarantee cause profit. Except for investment, we can reject the null hypotheses at a 5% significance value. And for the variables combined together, we can safely conclude that they will cause next-quarter profit. 
+- It is nevertheless not practical to use data back in the 1950s to train the model to predict the 2024q4 profit. In reality, it is more reasonable to use a shorter lookback period and use the most recent data to capture regime shifts in the economy. 
+
+## Rolling-window prediction
+- Two key variables: number of lags and number of lookback periods (size of the training data)
+- tradeoff: too few lags might produce volatile predictions; too many lags require a long lookback period, which reduces the series of predictions.
+- Multiple combinations of a number of lags and lookback periods are tested, and all of them are reported. No iteration or data mining.
+- Results of models using level changes are documented but not reported since their performance is very poor. 
+
+## Results
+- x-y means x lags and y lookback period
+- control models only use past profit and data, which captures the self-correlation of profit and potential trends. 
+- Models of any set of parameters can significantly beat their control models. Performance increases with the number of lags and lookback period. 
+
+| Model         | R²         | Model            | R²         |
+|---------------|------------|------------------|------------|
+| 4-80          | 0.1906034  | 8-100            | 0.2850141  |
+| 12-120        | 0.3586333  | 16-160           | 0.439759   |
+| control 4-80  | 0.0173584  | control 8-100    | 0.019117   |
+
+## Robustness check
+- now, we predict SP500 earnings instead of the corporate profit in the NIPAs.
+- SP500 earnings are correlated with aggregate profit, but there are some secular deviations. 
+- The models do even better with SP500 earnings.
+
+| Model         | 4 - 80    | 8 - 100   | 12 - 120  |
+|---------------|-----------|-----------|-----------|
+| R2            | 0.2851897 | 0.3921567 | 0.4766344 |
+
+## SP500 earnings
+![](../../results/robustness/SPvsNIPAs.png)
+
+## More Robustness Check
+- now, we predict annual profit rather than quarterly profit. 
+- data ranges from 1929 to 2023
+- models perform worse. It seems that annual data are harder to predict, mainly because we have less data available. 
+
+| Model         | 4-40       | 4-60       | 6-60       |
+|---------------|------------|------------|------------|
+| R²            | 0.0553855  | 0.1291389  | 0.4447948  |
+
+## Predicting next-year profit
+![](../../results/robustness/prediction_annual.png)
+
+## Alternative approach
+- In practice, we should model each component of profit and then aggregate them for higher accuracy. 
+- This approach has been tried, but the heroic model I used could not achieve any decent result.
+- Government saving is unpredictable, which shows that it is indeed autonomous. 
+- Other variables are, to some extent, predictable, but adding them up produces extremely volatile estimates for profit. 
+
+| 8 - 100               |     R²       |
+|-----------------------|:------------:|
+| Government saving     |   -0.1430996 |
+| Personal saving       |    0.2360006 |
+| Net Investment        |    0.3381232 |
+| Foreign saving        |    0.2146015 |
+| Net Dividend          |    0.4166412 |
+| Corporate Profit      |  -71.0502500 |
+
+
+## Conclusion
+- This study has achieved relative success in showing that predicting future aggregate profit is possible.
+- Sufficient numbers of lags and lookback periods are essential for prediction performance.
+- Stationarity is highly important for time-series analysis. We must be careful about spurious correlations. 
+
+## limitations
+- No explanation on how the RHS variables cause profit. The VAR test produces complex and counter-intuitive results and is difficult to interpret. 
+- This approach of predicting profit is not what we will do in practice. In practice, we should model each component of profit and then aggregate them. Complicated large models with big & alternative data might be necessary for an accurate prediction. 
+- The prediction can be extended to forecasting second next quarters, but I doubt that will reduce accuracy. 
