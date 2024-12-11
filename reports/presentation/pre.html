@@ -1291,17 +1291,19 @@ p_{cp,t} = &amp; \ \alpha_{cp} + \sum_{i=1}^{8} \left( \beta_{cp,i} p_{cp,t-i} +
 <h2>Rolling-window prediction</h2>
 <ul>
 <li>Two key variables: number of lags and number of lookback periods (size of the training data)</li>
-<li>tradeoff: too few lags might produce volatile predictions; too many lags require a long lookback period, which reduces the series of predictions.</li>
-<li>Multiple combinations of a number of lags and lookback periods are tested, and all of them are reported. No iteration or data mining.</li>
+<li>tradeoff: too few lags might produce volatile predictions and forgo some predictive power. Too many lags require a long lookback period, which might overfit on too old data. With limited data, too many lags also shorten the prediction series for evaluation.<br>
+</li>
+<li>Multiple combinations of a number of lags and lookback periods are tested, and all of them are reported. No optimization or data mining.<br>
+</li>
 <li>Results of models using level changes are documented but not reported since their performance is very poor.</li>
 </ul>
 </section>
 <section id="results" class="slide level2">
 <h2>Results</h2>
 <ul>
-<li>x-y means x lags and y lookback period</li>
-<li>control models only use past profit and data, which captures the self-correlation of profit and potential trends.</li>
-<li>Models of any set of parameters can significantly beat their control models. Performance increases with the number of lags and lookback period.</li>
+<li>x-y means x lags and y lookback periods</li>
+<li>control models only use past profit and date, which captures the self-correlation of profit and potential trends.</li>
+<li>Models of any set of parameters can significantly beat their control models. Performance increases with the number of lags and lookback periods.</li>
 </ul>
 <table class="caption-top">
 <thead>

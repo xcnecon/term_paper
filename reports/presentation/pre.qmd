@@ -79,14 +79,14 @@ The null hypothesis is that a variable does not Granger cause profit. Except for
 
 ## Rolling-window prediction
 - Two key variables: number of lags and number of lookback periods (size of the training data)
-- tradeoff: too few lags might produce volatile predictions; too many lags require a long lookback period, which reduces the series of predictions.
-- Multiple combinations of a number of lags and lookback periods are tested, and all of them are reported. No iteration or data mining.
-- Results of models using level changes are documented but not reported since their performance is very poor. 
+- tradeoff: too few lags might produce volatile predictions and forgo some predictive power. Too many lags require a long lookback period, which might overfit on too old data. With limited data, too many lags also shorten the prediction series for evaluation.  
+- Multiple combinations of a number of lags and lookback periods are tested, and all of them are reported. No optimization or data mining.  
+- Results of models using level changes are documented but not reported since their performance is very poor.  
 
 ## Results
-- x-y means x lags and y lookback period
-- control models only use past profit and data, which captures the self-correlation of profit and potential trends. 
-- Models of any set of parameters can significantly beat their control models. Performance increases with the number of lags and lookback period. 
+- x-y means x lags and y lookback periods
+- control models only use past profit and date, which captures the self-correlation of profit and potential trends. 
+- Models of any set of parameters can significantly beat their control models. Performance increases with the number of lags and lookback periods. 
 
 | Model         | R²         | Model            | R²         |
 |---------------|------------|------------------|------------|
