@@ -11,6 +11,14 @@ format:
     height: 800
 ---
 
+## Schedule
+- Motivation  
+- Data Cleaning  
+- Granger Causality  
+- Rolling-window prediction  
+- Robustness  
+- Conclusion  
+
 ## Why is profit important?
 
 - We live in a monetary economy. 
@@ -66,7 +74,7 @@ $${#eq-var}
 | Profit         | Net Dividend    | 19.697 |  8 | 0.012       |
 | Profit         | ALL             | 137.39 | 40 | 0.000       |
 
-The null hypothesis is that a variable does not guarantee cause profit. Except for investment, we can reject the null hypotheses at a 5% significance value. And for the variables combined together, we can safely conclude that they will cause next-quarter profit. 
+The null hypothesis is that a variable does not Granger cause profit. Except for investment, we can reject the null hypotheses at a 5% significance value. And for the variables combined together, we can safely conclude that they will cause next-quarter profit.  
 - It is nevertheless not practical to use data back in the 1950s to train the model to predict the 2024q4 profit. In reality, it is more reasonable to use a shorter lookback period and use the most recent data to capture regime shifts in the economy. 
 
 ## Rolling-window prediction

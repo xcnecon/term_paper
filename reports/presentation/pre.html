@@ -1154,6 +1154,22 @@ Chenning Xu
 </div>
 
 </section>
+<section id="schedule" class="slide level2">
+<h2>Schedule</h2>
+<ul>
+<li>Motivation<br>
+</li>
+<li>Data Cleaning<br>
+</li>
+<li>Granger Causality<br>
+</li>
+<li>Rolling-window prediction<br>
+</li>
+<li>Robustness<br>
+</li>
+<li>Conclusion</li>
+</ul>
+</section>
 <section id="why-is-profit-important" class="slide level2">
 <h2>Why is profit important?</h2>
 <ul>
@@ -1268,7 +1284,8 @@ p_{cp,t} = &amp; \ \alpha_{cp} + \sum_{i=1}^{8} \left( \beta_{cp,i} p_{cp,t-i} +
 </tr>
 </tbody>
 </table>
-<p>The null hypothesis is that a variable does not guarantee cause profit. Except for investment, we can reject the null hypotheses at a 5% significance value. And for the variables combined together, we can safely conclude that they will cause next-quarter profit. - It is nevertheless not practical to use data back in the 1950s to train the model to predict the 2024q4 profit. In reality, it is more reasonable to use a shorter lookback period and use the most recent data to capture regime shifts in the economy.</p>
+<p>The null hypothesis is that a variable does not Granger cause profit. Except for investment, we can reject the null hypotheses at a 5% significance value. And for the variables combined together, we can safely conclude that they will cause next-quarter profit.<br>
+- It is nevertheless not practical to use data back in the 1950s to train the model to predict the 2024q4 profit. In reality, it is more reasonable to use a shorter lookback period and use the most recent data to capture regime shifts in the economy.</p>
 </section>
 <section id="rolling-window-prediction" class="slide level2">
 <h2>Rolling-window prediction</h2>
